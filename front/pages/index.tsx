@@ -1,9 +1,24 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import axios from "axios";
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import React from "react";
+import styles from "../styles/Home.module.css";
+
+type Response = {
+  message: string;
+};
 
 const Home: NextPage = () => {
+  const [data, setData] = React.useState<Response>();
+  const url = "http://127.0.0.1:8000/api/hello";
+
+  const GetData = () => {
+    axios.get(url).then((res) => {
+      setData(res.data);
+    });
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -16,9 +31,14 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+        {data ? (
+          <div>{data.message}</div>
+        ) : (
+          <button onClick={GetData}>データを取得</button>
+        )}
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing{" "}
           <code className={styles.code}>pages/index.tsx</code>
         </p>
 
@@ -59,14 +79,14 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
