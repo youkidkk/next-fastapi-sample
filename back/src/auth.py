@@ -6,6 +6,8 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
+from database import users
+
 PREFIX_PATH = "/api/auth"
 TOKEN_PATH = "/token"
 
@@ -13,15 +15,6 @@ SECRET_KEY = "0a6e1cb4d32c4822c269b2bada551c12b22ba98ed85108d3004f6bebfbf87422"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-fake_users_db = {
-    "johndoe": {
-        "username": "johndoe",
-        "hashed_password": (
-            "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW"
-        ),
-        "disabled": False,
-    }
-}
 
 router = APIRouter(prefix=PREFIX_PATH)
 
@@ -57,15 +50,15 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def get_user(db, username: str) -> UserInDB | None:
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+def get_user(username: str) -> UserInDB | None:
+    user = users.select_by_name(username)
+    if user:
+        return UserInDB(username=user.name, hashed_password=user.password)
     return None
 
 
-def authenticate_user(fake_db, username: str, password: str) -> UserInDB | None:
-    user = get_user(fake_db, username)
+def authenticate_user(username: str, password: str) -> UserInDB | None:
+    user = get_user(username)
     if not user:
         return None
     if not verify_password(password, user.hashed_password):
@@ -98,7 +91,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(fake_users_db, username=token_data.username)
+    user = get_user(username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
@@ -112,7 +105,7 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 
 @router.post(TOKEN_PATH, response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+    user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
