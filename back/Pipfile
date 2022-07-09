@@ -5,10 +5,13 @@ verify_ssl = true
 
 [packages]
 fastapi = "*"
-uvicorn = "*"
-pydantic = "*"
-sqlalchemy = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
 psycopg2 = "*"
+pydantic = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+sqlalchemy = "*"
+uvicorn = "*"
+python-multipart = "*"
 
 [dev-packages]
 black = "*"
