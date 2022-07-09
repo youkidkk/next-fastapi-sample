@@ -6,7 +6,8 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-router = APIRouter(prefix="/api/auth")
+PREFIX_PATH = "/api/auth"
+TOKEN_PATH = "/token"
 
 SECRET_KEY = "0a6e1cb4d32c4822c269b2bada551c12b22ba98ed85108d3004f6bebfbf87422"
 ALGORITHM = "HS256"
@@ -21,6 +22,8 @@ fake_users_db = {
         "disabled": False,
     }
 }
+
+router = APIRouter(prefix=PREFIX_PATH)
 
 
 class Token(BaseModel):
@@ -43,7 +46,7 @@ class UserInDB(User):
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{PREFIX_PATH}{TOKEN_PATH}")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -107,7 +110,7 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     return current_user
 
 
-@router.post("/token", response_model=Token)
+@router.post(TOKEN_PATH, response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(fake_users_db, form_data.username, form_data.password)
     if not user:
