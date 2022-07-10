@@ -9,7 +9,7 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import MessageSnackBar from "../components/MessageSnackBar";
@@ -31,8 +31,20 @@ export default function SignUp() {
       return;
     }
     const url = "http://127.0.0.1:8000/api/auth/signup";
-    const res = await axios.post(url, data);
-    setMessage({ open: true, text: "登録しました。", severity: "success" });
+    try {
+      const res = await axios.post(url, data);
+      setMessage({ open: true, text: "登録しました。", severity: "success" });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const res = error.response;
+        console.log(res);
+        setMessage({
+          open: true,
+          text: error.response?.data.detail,
+          severity: "error",
+        });
+      }
+    }
   };
   return (
     <ThemeProvider theme={theme}>
