@@ -128,7 +128,5 @@ async def signin(
 async def signup(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
-    user = users.User()
-    user.name = form_data.username
-    user.password = get_password_hash(form_data.password)
-    users.insert(db, user)
+    hashed_password = get_password_hash(form_data.password)
+    users.insert(db, form_data.username, hashed_password)

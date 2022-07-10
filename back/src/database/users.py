@@ -16,7 +16,11 @@ class User(Base):
     updated_at = Column(DateTime(timezone=False), default=datetime.now())
 
 
-def insert(db: Session, user: User) -> None:
+def insert(db: Session, name: str, hashed_password: str) -> None:
+    user = User()
+    user.name = name
+    user.password = hashed_password
+
     db.add(user)
     db.commit()
 
