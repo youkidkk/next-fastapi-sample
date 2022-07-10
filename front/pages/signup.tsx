@@ -1,5 +1,4 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Snackbar } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -13,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
+import MessageSnackBar from "../components/MessageSnackBar";
 import { messageState } from "../store/auth";
 
 type Inputs = {
@@ -40,11 +40,7 @@ export default function SignUp() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        {message.text !== "" ? (
-          <Snackbar open={true} message={message.text} />
-        ) : (
-          <></>
-        )}
+        <MessageSnackBar />
         <Box
           sx={{
             marginTop: 8,
