@@ -39,7 +39,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            サインイン
           </Typography>
           <Box
             component="form"
@@ -51,10 +51,9 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="ユーザー名"
+              name="username"
               autoFocus
             />
             <TextField
@@ -62,10 +61,9 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="パスワード"
               type="password"
               id="password"
-              autoComplete="current-password"
             />
             <Button
               type="submit"
@@ -73,12 +71,12 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              サインイン
             </Button>
             <Grid container>
               <Grid item>
                 <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {"サインアップ"}
                 </Link>
               </Grid>
             </Grid>
