@@ -28,6 +28,11 @@ export default function SignUp() {
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     if (data.password !== data.retypePassword) {
+      setMessage({
+        open: true,
+        text: "パスワードを再入力してください。",
+        severity: "warning",
+      });
       return;
     }
     const url = "http://127.0.0.1:8000/api/auth/signup";
