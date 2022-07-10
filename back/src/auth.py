@@ -11,7 +11,7 @@ from database import db_user
 from database.connector import get_db
 
 PREFIX_PATH = "/api/auth"
-TOKEN_PATH = "/token"
+LOGIN_PATH = "/login"
 
 SECRET_KEY = "0a6e1cb4d32c4822c269b2bada551c12b22ba98ed85108d3004f6bebfbf87422"
 ALGORITHM = "HS256"
@@ -41,7 +41,7 @@ class UserInDB(User):
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{PREFIX_PATH}{TOKEN_PATH}")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{PREFIX_PATH}{LOGIN_PATH}")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -105,7 +105,7 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     return current_user
 
 
-@router.post(TOKEN_PATH, response_model=Token)
+@router.post(LOGIN_PATH, response_model=Token)
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
