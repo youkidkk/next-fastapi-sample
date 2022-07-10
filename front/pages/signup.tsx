@@ -1,4 +1,5 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Snackbar } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -11,6 +12,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import { messageState } from "../store/auth";
 
 type Inputs = {
   username: string;
@@ -21,6 +24,7 @@ type Inputs = {
 const theme = createTheme();
 
 export default function SignUp() {
+  const [message, setMessage] = useRecoilState(messageState);
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     if (data.password !== data.retypePassword) {
@@ -30,13 +34,17 @@ export default function SignUp() {
     const res = await axios.post(url, data, {
       headers: { "Content-Type": "application/json" },
     });
-    console.log(res);
+    setMessage({ text: "登録しました。" });
   };
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        {message.text !== "" ? (
+          <Snackbar open={true} message={message.text} />
+        ) : (
+          <></>
+        )}
         <Box
           sx={{
             marginTop: 8,
