@@ -34,7 +34,7 @@ export default function SignUp() {
     const res = await axios.post(url, data, {
       headers: { "Content-Type": "application/json" },
     });
-    setMessage({ text: "登録しました。" });
+    setMessage({ open: true, text: "登録しました。", severity: "success" });
   };
   return (
     <ThemeProvider theme={theme}>
