@@ -39,7 +39,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            サインアップ
           </Typography>
           <Box
             component="form"
@@ -52,10 +52,9 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="username"
+                  label="ユーザー名"
+                  name="username"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -63,10 +62,9 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="パスワード"
                   type="password"
                   id="password"
-                  autoComplete="new-password"
                 />
               </Grid>
             </Grid>
@@ -76,12 +74,12 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              サインアップ
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="#" variant="body2">
-                  Already have an account? Sign in
+                  サインイン
                 </Link>
               </Grid>
             </Grid>
