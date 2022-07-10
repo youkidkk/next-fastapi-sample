@@ -22,17 +22,15 @@ const theme = createTheme();
 
 export default function SignUp() {
   const { register, handleSubmit } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     if (data.password !== data.retypePassword) {
       return;
     }
     const url = "http://127.0.0.1:8000/api/auth/signup";
-    axios
-      .post(url, data, { headers: { "Content-Type": "application/json" } })
-      .then((res) => {
-        // TODO
-        console.log(res);
-      });
+    const res = await axios.post(url, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+    console.log(res);
   };
 
   return (
