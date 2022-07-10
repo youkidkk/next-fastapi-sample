@@ -31,9 +31,7 @@ export default function SignUp() {
       return;
     }
     const url = "http://127.0.0.1:8000/api/auth/signup";
-    const res = await axios.post(url, data, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const res = await axios.post(url, data);
     setMessage({ open: true, text: "登録しました。", severity: "success" });
   };
   return (
