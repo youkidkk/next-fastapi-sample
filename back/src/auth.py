@@ -128,5 +128,10 @@ async def signin(
 async def signup(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
+    user = get_user(db, form_data.username)
+    if user:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+        )
     hashed_password = get_password_hash(form_data.password)
     users.insert(db, form_data.username, hashed_password)
