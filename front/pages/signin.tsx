@@ -9,6 +9,7 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 import * as React from "react";
 
 const theme = createTheme();
@@ -16,10 +17,11 @@ const theme = createTheme();
 export default function SignIn() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const url = "http://127.0.0.1:8000/api/auth/signin";
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    axios.post(url, data).then((res) => {
+      // TODO
+      console.log(res);
     });
   };
 
