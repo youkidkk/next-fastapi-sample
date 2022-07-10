@@ -46,7 +46,7 @@ export default function SignUp() {
         setMessage({
           open: true,
           text: error.response?.data.detail,
-          severity: "error",
+          severity: "warning",
         });
       }
     }
