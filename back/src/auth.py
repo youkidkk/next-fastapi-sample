@@ -12,6 +12,7 @@ from database.connector import get_db
 
 PREFIX_PATH = "/api/auth"
 LOGIN_PATH = "/login"
+SIGNUP_PATH = "/signup"
 
 SECRET_KEY = "0a6e1cb4d32c4822c269b2bada551c12b22ba98ed85108d3004f6bebfbf87422"
 ALGORITHM = "HS256"
@@ -121,3 +122,13 @@ async def login_for_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post(SIGNUP_PATH)
+async def signup(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
+    user = users.User()
+    user.name = form_data.username
+    user.password = get_password_hash(form_data.password)
+    users.insert(db, user)
