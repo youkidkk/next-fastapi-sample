@@ -11,7 +11,7 @@ export const messageState = atom<MessageStateType>({
   key: "message",
   default: {
     open: false,
-    text: undefined,
-    severity: undefined,
+    text: "",
+    severity: "success",
   },
 });
