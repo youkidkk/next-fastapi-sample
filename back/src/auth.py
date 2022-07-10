@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from database import db_user
+from database import users
 from database.connector import get_db
 
 PREFIX_PATH = "/api/auth"
@@ -53,7 +53,7 @@ def get_password_hash(password: str) -> str:
 
 
 def get_user(db: Session, username: str) -> UserInDB | None:
-    user = db_user.select_by_name(db, username)
+    user = users.select_by_name(db, username)
     if user:
         return UserInDB(username=user.name, hashed_password=user.password)
     return None
