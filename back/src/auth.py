@@ -5,8 +5,10 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
-from database import users
+from database import models
+from database.connector import get_db
 
 PREFIX_PATH = "/api/auth"
 TOKEN_PATH = "/token"
@@ -50,15 +52,15 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def get_user(username: str) -> UserInDB | None:
-    user = users.select_by_name(username)
+def get_user(db: Session, username: str) -> UserInDB | None:
+    user = models.select_by_name(db, username)
     if user:
         return UserInDB(username=user.name, hashed_password=user.password)
     return None
 
 
-def authenticate_user(username: str, password: str) -> UserInDB | None:
-    user = get_user(username)
+def authenticate_user(db: Session, username: str, password: str) -> UserInDB | None:
+    user = get_user(db, username)
     if not user:
         return None
     if not verify_password(password, user.hashed_password):
@@ -77,7 +79,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(db: Session, token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -91,7 +93,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    user = get_user(username=token_data.username)
+    user = get_user(db, username=token_data.username)
     if user is None:
         raise credentials_exception
     return user
@@ -104,8 +106,10 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 
 
 @router.post(TOKEN_PATH, response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
+    user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
