@@ -137,7 +137,7 @@ async def signup(form_data: SignUpForm, db: Session = Depends(get_db)):
     user = get_user(db, form_data.username)
     if user:
         raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
+            status_code=status.HTTP_409_CONFLICT, detail="既に登録されているユーザー名です。"
         )
     hashed_password = get_password_hash(form_data.password)
     users.insert(db, form_data.username, hashed_password)
