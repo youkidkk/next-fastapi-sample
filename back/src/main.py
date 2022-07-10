@@ -3,6 +3,9 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import auth
+from database.connector import Base, engine
+
+Base.metadata.create_all(engine)
 
 app = FastAPI()
 app.include_router(auth.router)

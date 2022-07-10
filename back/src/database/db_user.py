@@ -4,7 +4,7 @@ from sqlalchemy import Column
 from sqlalchemy.orm import Session
 from sqlalchemy.types import DateTime, Integer, String
 
-from database.connector import Base, engine
+from database.connector import Base
 
 
 class User(Base):
@@ -14,9 +14,6 @@ class User(Base):
     password = Column(String(200))
     created_at = Column(DateTime(timezone=False), default=datetime.now())
     updated_at = Column(DateTime(timezone=False), default=datetime.now())
-
-
-Base.metadata.create_all(engine)
 
 
 def insert(db: Session, user: User) -> None:
