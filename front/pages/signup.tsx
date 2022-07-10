@@ -10,19 +10,29 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+type Inputs = {
+  username: string;
+  password: string;
+  retypePassword: string;
+};
 
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const { register, handleSubmit } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    if (data.password !== data.retypePassword) {
+      return;
+    }
     const url = "http://127.0.0.1:8000/api/auth/signup";
-    const data = new FormData(event.currentTarget);
-    axios.post(url, data).then((res) => {
-      // TODO
-      console.log(res);
-    });
+    axios
+      .post(url, data, { headers: { "Content-Type": "application/json" } })
+      .then((res) => {
+        // TODO
+        console.log(res);
+      });
   };
 
   return (
@@ -46,7 +56,7 @@ export default function SignUp() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -54,19 +64,26 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="username"
                   label="ユーザー名"
-                  name="username"
+                  {...register("username")}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="password"
                   label="パスワード"
                   type="password"
-                  id="password"
+                  {...register("password")}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="パスワード（再入力）"
+                  type="password"
+                  {...register("retypePassword")}
                 />
               </Grid>
             </Grid>

@@ -10,15 +10,19 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+type Inputs = {
+  username: string;
+  password: string;
+};
 
 const theme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const { register, handleSubmit } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
     const url = "http://127.0.0.1:8000/api/auth/signin";
-    const data = new FormData(event.currentTarget);
     axios.post(url, data).then((res) => {
       // TODO
       console.log(res);
@@ -45,7 +49,7 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -53,19 +57,17 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="username"
               label="ユーザー名"
-              name="username"
               autoFocus
+              {...register("username")}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              name="password"
               label="パスワード"
               type="password"
-              id="password"
+              {...register("password")}
             />
             <Button
               type="submit"
