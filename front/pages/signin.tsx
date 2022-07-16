@@ -9,7 +9,6 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
@@ -22,9 +21,7 @@ const theme = createTheme();
 export default function SignIn() {
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const url = "http://127.0.0.1:8000/api/auth/signin";
-    const res = await axios.post(url, data);
-    console.log(res);
+    // TODO
   };
 
   return (
