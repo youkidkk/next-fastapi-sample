@@ -9,7 +9,11 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { signIn } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import MessageSnackBar from "../components/MessageSnackBar";
+import { messageState } from "../store/message-state";
 
 type Inputs = {
   username: string;
@@ -19,15 +23,34 @@ type Inputs = {
 const theme = createTheme();
 
 export default function SignIn() {
+  const [message, setMessage] = useRecoilState(messageState);
   const { register, handleSubmit } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // TODO
+  const onSubmit: SubmitHandler<Inputs> = async (values) => {
+    const res = await signIn("credentials", {
+      redirect: false,
+      username: values.username,
+      password: values.password,
+    });
+    if (res?.error) {
+      setMessage({
+        open: true,
+        text: "エラー" + res?.error,
+        severity: "warning",
+      });
+    } else {
+      setMessage({
+        open: true,
+        text: res?.status.toString(),
+        severity: "success",
+      });
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        <MessageSnackBar />
         <Box
           sx={{
             marginTop: 8,
