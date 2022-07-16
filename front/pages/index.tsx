@@ -1,3 +1,4 @@
+import { Link } from "@mui/material";
 import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -31,6 +32,12 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        <div>
+          <Link href="signin" variant="body2">
+            サインイン
+          </Link>
+        </div>
       </main>
 
       <footer className={styles.footer}>
