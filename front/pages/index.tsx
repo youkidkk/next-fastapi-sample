@@ -1,9 +1,7 @@
 import { Link } from "@mui/material";
-import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import React from "react";
 import styles from "../styles/Home.module.css";
 
 type Response = {
@@ -11,15 +9,6 @@ type Response = {
 };
 
 const Home: NextPage = () => {
-  const [data, setData] = React.useState<Response>();
-  const url = "http://127.0.0.1:8000/api/hello";
-
-  const GetData = () => {
-    axios.get(url).then((res) => {
-      setData(res.data);
-    });
-  };
-
   return (
     <div className={styles.container}>
       <Head>
