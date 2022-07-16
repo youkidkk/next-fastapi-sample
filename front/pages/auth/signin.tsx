@@ -9,25 +9,43 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { signIn } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import MessageSnackBar from "../components/MessageSnackBar";
-import { messageState } from "../store/message-state";
+import MessageSnackBar from "../../components/MessageSnackBar";
+import { messageState } from "../../store/message-state";
 
 type Inputs = {
   username: string;
   password: string;
-  retypePassword: string;
 };
 
 const theme = createTheme();
 
-export default function SignUp() {
+export default function SignIn() {
   const [message, setMessage] = useRecoilState(messageState);
   const { register, handleSubmit } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // TODO
+  const onSubmit: SubmitHandler<Inputs> = async (values) => {
+    const res = await signIn("credentials", {
+      redirect: false,
+      username: values.username,
+      password: values.password,
+    });
+    if (res?.error) {
+      setMessage({
+        open: true,
+        text: "エラー" + res?.error,
+        severity: "warning",
+      });
+    } else {
+      setMessage({
+        open: true,
+        text: res?.status.toString(),
+        severity: "success",
+      });
+    }
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -45,54 +63,42 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            サインアップ
+            サインイン
           </Typography>
           <Box
             component="form"
-            noValidate
             onSubmit={handleSubmit(onSubmit)}
-            sx={{ mt: 3 }}
+            noValidate
+            sx={{ mt: 1 }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="ユーザー名"
-                  {...register("username")}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="パスワード"
-                  type="password"
-                  {...register("password")}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  label="パスワード（再入力）"
-                  type="password"
-                  {...register("retypePassword")}
-                />
-              </Grid>
-            </Grid>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="ユーザー名"
+              autoFocus
+              {...register("username")}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="パスワード"
+              type="password"
+              {...register("password")}
+            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              サインアップ
+              サインイン
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container>
               <Grid item>
-                <Link href="signin" variant="body2">
-                  サインイン
+                <Link href="signup" variant="body2">
+                  {"サインアップ"}
                 </Link>
               </Grid>
             </Grid>

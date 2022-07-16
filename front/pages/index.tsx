@@ -23,7 +23,7 @@ const Home: NextPage = () => {
         </h1>
 
         <div>
-          <Link href="signin" variant="body2">
+          <Link href="auth/signin" variant="body2">
             サインイン
           </Link>
         </div>
