@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
@@ -38,16 +38,6 @@ class User(BaseModel):
 
 class UserInDB(User):
     hashed_password: str
-
-
-class SignInForm(BaseModel):
-    username: str
-    password: str
-
-
-class SignUpForm(BaseModel):
-    username: str
-    password: str
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -117,7 +107,9 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
 
 
 @router.post(SIGNIN_PATH, response_model=Token)
-async def signin(form_data: SignInForm, db: Session = Depends(get_db)):
+async def signin(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -133,11 +125,13 @@ async def signin(form_data: SignInForm, db: Session = Depends(get_db)):
 
 
 @router.post(SIGNUP_PATH)
-async def signup(form_data: SignUpForm, db: Session = Depends(get_db)):
+async def signup(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
     user = get_user(db, form_data.username)
     if user:
         raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="譌｢縺ｫ逋ｻ骭ｲ縺輔ｌ縺ｦ縺�繧九Θ繝ｼ繧ｶ繝ｼ蜷阪〒縺吶�"
+            status_code=status.HTTP_409_CONFLICT, detail="既に登録されているユーザー名です。"
         )
     hashed_password = get_password_hash(form_data.password)
     users.insert(db, form_data.username, hashed_password)
