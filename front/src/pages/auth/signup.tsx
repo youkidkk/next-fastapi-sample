@@ -1,15 +1,16 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { Link as MuiLink } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios, { AxiosError } from "axios";
+import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import MessageSnackBar from "../../components/MessageSnackBar";
@@ -118,9 +119,9 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="signin" variant="body2">
-                  サインイン
-                </Link>
+                <MuiLink variant="body2">
+                  <Link href="singin">サインイン</Link>
+                </MuiLink>
               </Grid>
             </Grid>
           </Box>
