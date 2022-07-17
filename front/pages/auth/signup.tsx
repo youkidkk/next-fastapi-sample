@@ -13,7 +13,7 @@ import axios, { AxiosError } from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import MessageSnackBar from "../../components/MessageSnackBar";
-import { messageState } from "../../store/message-state";
+import { messageState } from "../../store/MessageState";
 
 type Inputs = {
   username: string;

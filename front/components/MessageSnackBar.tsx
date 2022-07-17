@@ -1,6 +1,6 @@
 import { Alert, Snackbar } from "@mui/material";
 import { useRecoilState } from "recoil";
-import { messageState } from "../store/message-state";
+import { messageState } from "../store/MessageState";
 
 export default function MessageSnackBar() {
   const [message, setMessage] = useRecoilState(messageState);

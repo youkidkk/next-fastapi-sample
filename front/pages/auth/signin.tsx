@@ -14,7 +14,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import MessageSnackBar from "../../components/MessageSnackBar";
 import { authState } from "../../store/AuthState";
-import { messageState } from "../../store/message-state";
+import { messageState } from "../../store/MessageState";
 
 type Inputs = {
   username: string;
