@@ -9,10 +9,11 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { signIn } from "next-auth/react";
+import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import MessageSnackBar from "../../components/MessageSnackBar";
+import { authState } from "../../store/AuthState";
 import { messageState } from "../../store/message-state";
 
 type Inputs = {
@@ -24,24 +25,38 @@ const theme = createTheme();
 
 export default function SignIn() {
   const [message, setMessage] = useRecoilState(messageState);
+  const [auth, setAuth] = useRecoilState(authState);
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (values) => {
-    const res = await signIn("credentials", {
-      redirect: false,
-      username: values.username,
-      password: values.password,
-    });
-    if (res?.error) {
+    const url = "http://localhost:8000/api/auth/signin";
+    try {
+      const data = new FormData();
+      data.append("username", values.username);
+      data.append("password", values.password);
+      const res = await axios.post(url, data);
+      console.log(res);
+      if (res.status != 200) {
+        setMessage({
+          open: true,
+          text: "エラー" + res,
+          severity: "warning",
+        });
+      } else {
+        setAuth({
+          userName: values.username,
+          accessToken: res.data.access_token,
+        });
+        setMessage({
+          open: true,
+          text: res?.status.toString(),
+          severity: "success",
+        });
+      }
+    } catch (error) {
       setMessage({
         open: true,
-        text: "エラー" + res?.error,
+        text: "エラー" + error,
         severity: "warning",
-      });
-    } else {
-      setMessage({
-        open: true,
-        text: res?.status.toString(),
-        severity: "success",
       });
     }
   };
