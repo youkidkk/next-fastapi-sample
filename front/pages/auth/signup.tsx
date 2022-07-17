@@ -9,6 +9,7 @@ import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import axios, { AxiosError } from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import MessageSnackBar from "../../components/MessageSnackBar";
@@ -25,8 +26,33 @@ const theme = createTheme();
 export default function SignUp() {
   const [message, setMessage] = useRecoilState(messageState);
   const { register, handleSubmit } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // TODO
+  const onSubmit: SubmitHandler<Inputs> = async (values) => {
+    if (values.password !== values.retypePassword) {
+      setMessage({
+        open: true,
+        text: "パスワードを再入力してください。",
+        severity: "warning",
+      });
+      return;
+    }
+    const url = "http://127.0.0.1:8000/api/auth/signup";
+    try {
+      const data = new FormData();
+      data.append("username", values.username);
+      data.append("password", values.password);
+      const res = await axios.post(url, data);
+      setMessage({ open: true, text: "登録しました。", severity: "success" });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const res = error.response;
+        console.log(res);
+        setMessage({
+          open: true,
+          text: error.response?.data?.detail,
+          severity: "warning",
+        });
+      }
+    }
   };
   return (
     <ThemeProvider theme={theme}>
