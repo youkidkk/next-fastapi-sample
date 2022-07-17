@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import MessageSnackBar from "../../components/MessageSnackBar";
@@ -27,6 +28,7 @@ const theme = createTheme();
 export default function SignIn() {
   const [message, setMessage] = useRecoilState(messageState);
   const [auth, setAuth] = useRecoilState(authState);
+  const router = useRouter();
   const { register, handleSubmit } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = async (values) => {
     const url = "http://localhost:8000/api/auth/signin";
@@ -50,6 +52,7 @@ export default function SignIn() {
           text: res?.status.toString(),
           severity: "success",
         });
+        router.push("/");
       }
     } catch (error) {
       setMessage({
