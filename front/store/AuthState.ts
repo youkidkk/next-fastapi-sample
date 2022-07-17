@@ -1,11 +1,11 @@
 import { atom } from "recoil";
 
-type AuthInfo = {
+type AuthStateType = {
   userName: string;
   accessToken: string;
 };
 
-export const authState = atom<AuthInfo | undefined>({
+export const authState = atom<AuthStateType | undefined>({
   key: "auth",
   default: undefined,
 });
