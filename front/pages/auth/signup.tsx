@@ -29,7 +29,6 @@ export default function SignUp() {
   const onSubmit: SubmitHandler<Inputs> = async (values) => {
     if (values.password !== values.retypePassword) {
       setMessage({
-        open: true,
         text: "パスワードを再入力してください。",
         severity: "warning",
       });
@@ -41,13 +40,15 @@ export default function SignUp() {
       data.append("username", values.username);
       data.append("password", values.password);
       const res = await axios.post(url, data);
-      setMessage({ open: true, text: "登録しました。", severity: "success" });
+      setMessage({
+        text: "登録しました。",
+        severity: "success",
+      });
     } catch (error) {
       if (error instanceof AxiosError) {
         const res = error.response;
         console.log(res);
         setMessage({
-          open: true,
           text: error.response?.data?.detail,
           severity: "warning",
         });

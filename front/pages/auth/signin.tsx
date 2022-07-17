@@ -37,7 +37,6 @@ export default function SignIn() {
       console.log(res);
       if (res.status != 200) {
         setMessage({
-          open: true,
           text: "エラー" + res,
           severity: "warning",
         });
@@ -47,14 +46,12 @@ export default function SignIn() {
           accessToken: res.data.access_token,
         });
         setMessage({
-          open: true,
           text: res?.status.toString(),
           severity: "success",
         });
       }
     } catch (error) {
       setMessage({
-        open: true,
         text: "エラー" + error,
         severity: "warning",
       });
