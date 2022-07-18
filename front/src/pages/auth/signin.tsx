@@ -114,7 +114,7 @@ export default function SignIn() {
             <Grid container>
               <Grid item>
                 <MuiLink variant="body2">
-                  <Link href="singup">サインアップ</Link>
+                  <Link href="signup">サインアップ</Link>
                 </MuiLink>
                 <MuiLink variant="body2">
                   <Link href="/">ホーム</Link>

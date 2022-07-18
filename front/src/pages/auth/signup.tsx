@@ -120,7 +120,7 @@ export default function SignUp() {
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <MuiLink variant="body2">
-                  <Link href="singin">サインイン</Link>
+                  <Link href="signin">サインイン</Link>
                 </MuiLink>
               </Grid>
             </Grid>
