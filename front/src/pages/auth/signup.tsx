@@ -13,7 +13,6 @@ import axios, { AxiosError } from "axios";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import MessageSnackBar from "../../components/MessageSnackBar";
 import { messageState } from "../../store/MessageState";
 
 type Inputs = {
@@ -60,7 +59,6 @@ export default function SignUp() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <MessageSnackBar />
         <Box
           sx={{
             marginTop: 8,

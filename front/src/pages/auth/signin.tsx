@@ -14,7 +14,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import MessageSnackBar from "../../components/MessageSnackBar";
 import { authState } from "../../store/AuthState";
 import { messageState } from "../../store/MessageState";
 
@@ -66,7 +65,6 @@ export default function SignIn() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <MessageSnackBar />
         <Box
           sx={{
             marginTop: 8,
