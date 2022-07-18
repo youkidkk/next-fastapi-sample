@@ -47,6 +47,9 @@ const Home: NextPage = () => {
         <MuiLink variant="body2">
           <Link href="auth/signin">サインイン</Link>
         </MuiLink>
+        <MuiLink variant="body2">
+          <Link href="auth/signup">サインアップ</Link>
+        </MuiLink>
       </main>
 
       <footer className={styles.footer}>
