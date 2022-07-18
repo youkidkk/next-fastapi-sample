@@ -1,8 +1,9 @@
-import { Link } from "@mui/material";
+import { Link as MuiLink } from "@mui/material";
 import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styles from "../../styles/Home.module.css";
@@ -41,11 +42,9 @@ const Home: NextPage = () => {
 
         <h3>{message}</h3>
 
-        <div>
-          <Link href="auth/signin" variant="body2">
-            サインイン
-          </Link>
-        </div>
+        <MuiLink variant="body2">
+          <Link href="auth/signin">サインイン</Link>
+        </MuiLink>
       </main>
 
       <footer className={styles.footer}>
