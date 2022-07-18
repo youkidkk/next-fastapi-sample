@@ -1,20 +1,31 @@
+import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { authState } from "../store/AuthState";
 
 type AuthRouteProps = { children: ReactNode };
 
 export default function AuthRoute({ children }: AuthRouteProps) {
-  const [auth, setAuth] = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
   const router = useRouter();
   useEffect(() => {
-    if (!router.isReady) {
+    if (router.pathname.includes("/auth/")) {
       return;
     }
-    if (!auth && !router.pathname.includes("/auth/")) {
+    if (!auth && router.isReady) {
       router.push("/auth/signin");
     }
   }, [router, auth]);
-  return <>{children}</>;
+  if (router.pathname.includes("/auth/")) {
+    return <>{children}</>;
+  }
+  if (!auth) {
+    return (
+      <>
+        <CircularProgress />
+      </>
+    );
+  }
+  return children;
 }
