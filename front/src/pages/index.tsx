@@ -1,14 +1,31 @@
 import { Link } from "@mui/material";
+import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styles from "../../styles/Home.module.css";
+import { authState } from "../store/AuthState";
 
 type Response = {
   message: string;
 };
 
 const Home: NextPage = () => {
+  const [message, setMessage] = useState("");
+  const auth = useRecoilValue(authState);
+  useEffect(() => {
+    const url = "http://localhost:8000/api/hello";
+    const f = async () => {
+      const res = await axios.get(url, {
+        headers: { Authorization: "Bearer " + auth?.accessToken },
+      });
+      console.log(res);
+      setMessage(res.data.message);
+    };
+    f();
+  }, [auth?.accessToken]);
   return (
     <div className={styles.container}>
       <Head>
@@ -21,6 +38,8 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        <h3>{message}</h3>
 
         <div>
           <Link href="auth/signin" variant="body2">
