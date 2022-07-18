@@ -10,6 +10,9 @@ export default function AuthRoute({ children }: AuthRouteProps) {
   const auth = useRecoilValue(authState);
   const router = useRouter();
   useEffect(() => {
+    if (auth && router.isReady && router.pathname.includes("/signin")) {
+      router.push("/");
+    }
     if (router.pathname.includes("/auth/")) {
       return;
     }
