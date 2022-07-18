@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styles from "../../styles/Home.module.css";
+import MessageSnackBar from "../components/MessageSnackBar";
 import { authState } from "../store/AuthState";
 
 type Response = {
@@ -35,6 +36,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <MessageSnackBar />
       <main className={styles.main}>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
