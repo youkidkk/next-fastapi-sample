@@ -6,7 +6,7 @@ import { authState } from "../store/AuthState";
 
 type AuthRouteProps = { children: ReactNode };
 
-export default function AuthRoute({ children }: AuthRouteProps) {
+const AuthRoute = ({ children }: AuthRouteProps) => {
   const auth = useRecoilValue(authState);
   const router = useRouter();
   useEffect(() => {
@@ -30,5 +30,7 @@ export default function AuthRoute({ children }: AuthRouteProps) {
       </>
     );
   }
-  return children;
-}
+  return <>{children}</>;
+};
+
+export default AuthRoute;
