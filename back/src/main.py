@@ -23,8 +23,11 @@ app.add_middleware(
 
 
 @app.get("/api/hello")
-def hello(token: str = Depends(auth.oauth2_scheme)) -> dict:
-    return {"token": token, "message": "Hello World!!!"}
+def hello(
+    token: str = Depends(auth.oauth2_scheme),
+    user: auth.User = Depends(auth.get_current_active_user),
+) -> dict:
+    return {"token": token, "message": f"Hello {user.username}!!!"}
 
 
 if __name__ == "__main__":
